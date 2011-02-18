@@ -67,11 +67,9 @@ public class FormsColumnHeader extends JLabel {
         super();
         setName(sName);
         addMouseListener(new MouseListener() {
-                public void mousePressed(MouseEvent e) {
-                }
+                public void mousePressed(MouseEvent e) {}
 
-                public void mouseReleased(MouseEvent e) {
-                }
+                public void mouseReleased(MouseEvent e) {}
 
                 public void mouseEntered(MouseEvent e) {
                     bMouseOver = true;
@@ -147,14 +145,23 @@ public class FormsColumnHeader extends JLabel {
     public int getSortMode() {
         return iSortMode;
     }
+    
+    public void setSortOrder(int i) {
+      iSortOrder = i;
+      repaint();
+    }
+    
+    public int getSortOrder() {
+      return iSortOrder;
+    }
 
     public String getSortModeAsString() {
         String sSortMode = "";
         switch (getSortMode()) {
-        case FormsColumnHeader.DESCENDING:
+        case DESCENDING:
             sSortMode = "DESC";
             break;
-        case FormsColumnHeader.ASCENDING:
+        case ASCENDING:
             sSortMode = "ASC";
             break;
         default:
@@ -162,15 +169,6 @@ public class FormsColumnHeader extends JLabel {
             break;
         }
         return sSortMode;
-    }
-
-    public void setSortOrder(int i) {
-        iSortOrder = i;
-        repaint();
-    }
-
-    public int getSortOrder() {
-        return iSortOrder;
     }
 
     public void setMonitored(boolean b) {
@@ -196,12 +194,12 @@ public class FormsColumnHeader extends JLabel {
 
         // Paint arrow
         switch (iSortMode) {
-        case FormsColumnHeader.DESCENDING:
+        case DESCENDING:
             if (imgDesc != null) {
                 g.drawImage(imgDesc, getWidth() / 2 - 3, 1, null);
             }
             break;
-        case FormsColumnHeader.ASCENDING:
+        case ASCENDING:
             if (imgAsc != null) {
                 g.drawImage(imgAsc, getWidth() / 2 - 3, 1, null);
             }
