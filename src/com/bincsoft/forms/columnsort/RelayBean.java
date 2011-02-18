@@ -117,111 +117,94 @@ public class RelayBean extends VBean {
         }
     }
 
-    private PropertyChangeListener formsColumnHeaderChangeListener =
-        new PropertyChangeListener() {
-        public void propertyChange(PropertyChangeEvent e) {
-            if (e.getSource() instanceof FormsColumnHeader) {
-                if (!lstSortColumns.contains(e.getSource())) {
-                    lstSortColumns.add(e.getSource());
-                    Collections.sort(lstSortColumns, new BySortOrder());
-                }
-
-                if (e.getPropertyName().equals("SortMode")) {
-                    sortMode(e, true);
-                } else if (e.getPropertyName().equals("SortModeProgrammatically")) {
-                    sortMode(e, false);
-                } else if (e.getPropertyName().equals("ClickedWithMask")) {
-                    clickedWithMask(e, true);
-                } else if (e.getPropertyName().equals("ClickedProgrammaticallyWithMask")) {
-                    clickedWithMask(e, false);
-                } else {
-                } // What!? We can have other events?
+  private PropertyChangeListener formsColumnHeaderChangeListener = new PropertyChangeListener() {
+          public void propertyChange(PropertyChangeEvent e) {
+            if (e.getSource() instanceof FormsColumnHeader) {            
+              if (e.getPropertyName().equals("SortMode")) {
+                sortMode(e, true);
+              } else if (e.getPropertyName().equals("SortModeProgrammatically")) {
+                sortMode(e, false);
+              } else if (e.getPropertyName().equals("ClickedWithMask")) {
+                clickedWithMask(e, true);
+              } else if (e.getPropertyName().equals("ClickedProgrammaticallyWithMask")) {
+                clickedWithMask(e, false);
+              } else {} // What!? We can have other events?
             }
-        }
-
-        private void resetAllFormsColumnHeadersInBlock(String sBlockName, Component component, String sComponentName) {
-            final String sName = component.getClass().getName();
-            if (sName.equals(sComponentName) &&
-                ((FormsColumnHeader)component).getBlockName().equals(sBlockName)) {
-                ((FormsColumnHeader)component).setSortMode(FormsColumnHeader.UNSORTED);
-                ((FormsColumnHeader)component).setSortOrder(FormsColumnHeader.NOORDER);
-            }
-
-            if (component instanceof Container) {
-                Component components[] =
-                    ((Container)component).getComponents();
-                for (int i = 0; i < components.length; i++) {
-                    if (components[i] != null) {
-                        resetAllFormsColumnHeadersInBlock(sBlockName, components[i], sComponentName);
-                    }
-                }
-            }
-        }
-
-        private void sortMode(PropertyChangeEvent e, boolean bNotify) {
+          }
+          
+          private void sortMode(PropertyChangeEvent e, boolean bNotify) {
             FormsColumnHeader header = (FormsColumnHeader)e.getSource();
             int iRememberSortMode = header.getSortMode();
-            resetAllFormsColumnHeadersInBlock(header.getBlockName(), formsMain.getFrame(), header.getClass().getName());
+            lstSortColumns.resetAllInBlock(header.getBlockName());
             header.setSortOrder(FormsColumnHeader.NOORDER);
             header.setSortMode(iRememberSortMode);
-
+            
             if (bNotify) {
-                try {
-                    mHandler.setProperty(pEventValues, ((FormsColumnHeader)e.getSource()).getName() + "," + ((FormsColumnHeader)e.getSource()).getSortModeAsString());
-                    CustomEvent ce = new CustomEvent(mHandler, pHeaderClicked);
-                    dispatchCustomEvent(ce);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+              try {
+                  mHandler.setProperty(pEventValues, ((FormsColumnHeader)e.getSource()).getName() + "," + ((FormsColumnHeader)e.getSource()).getSortModeAsString());
+                  CustomEvent ce = new CustomEvent(mHandler, pHeaderClicked);
+                  dispatchCustomEvent(ce);
+              } catch (Exception ex) {
+                  ex.printStackTrace();
+              }
             }
-        }
-
-        private void clickedWithMask(PropertyChangeEvent e, boolean bNotify) {
+          }
+          
+          private void clickedWithMask(PropertyChangeEvent e, boolean bNotify) {       
             if (bNotify) {
                 String sSortString = "";
+                //System.out.println("UtilBean - BlockName: " + ((FormsColumnHeader)e.getSource()).getBlockName());
                 FormsColumnHeaderList lst = lstSortColumns.getList(((FormsColumnHeader)e.getSource()).getBlockName());
                 if (((FormsColumnHeader)e.getSource()).getSortOrder() == FormsColumnHeader.NOORDER)
-                    ((FormsColumnHeader)e.getSource()).setSortOrder(99);
+                  ((FormsColumnHeader)e.getSource()).setSortOrder(99);
                 Collections.sort(lst, new BySortOrder());
-                for (int i = 0; i < lst.size(); i++) {
-                    lst.getFormsColumnHeader(i).setSortOrder(i + 1);
-                    if (!sSortString.equals(""))
-                        sSortString += "|";
-                    sSortString += lst.getFormsColumnHeader(i).getName() + "," + lst.getFormsColumnHeader(i).getSortModeAsString();
+                for (int i=0; i<lst.size(); i++) {
+                  lst.getFormsColumnHeader(i).setSortOrder(i+1);
+                  if (!sSortString.equals("")) sSortString += "|";
+                  sSortString += lst.getFormsColumnHeader(i).getName() + "," + lst.getFormsColumnHeader(i).getSortModeAsString();
                 }
-
-                try {
-                    mHandler.setProperty(pEventValues, sSortString);
-                    CustomEvent ce = new CustomEvent(mHandler, pHeaderClicked);
-                    dispatchCustomEvent(ce);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                
+              try {
+                  mHandler.setProperty(pEventValues, sSortString);
+                  CustomEvent ce = new CustomEvent(mHandler, pHeaderClicked);
+                  dispatchCustomEvent(ce);
+              } catch (Exception ex) {
+                  ex.printStackTrace();
+              }
             }
-
+            
             Collections.sort(lstSortColumns, new BySortOrder());
-        }
-    };
+          }
+      };
 
     public class BySortOrder implements java.util.Comparator {
         public int compare(Object header1, Object header2) {
-            return ((FormsColumnHeader)header1).getSortOrder() - ((FormsColumnHeader)header2).getSortOrder();
+          return ((FormsColumnHeader)header1).getSortOrder() - ((FormsColumnHeader)header2).getSortOrder(); 
         }
-    }
-
-    public class FormsColumnHeaderList extends ArrayList {
-        public FormsColumnHeader getFormsColumnHeader(int i) {
-            return (FormsColumnHeader)get(i);
-        }
-
-        public FormsColumnHeaderList getList(String sBlockName) {
-            FormsColumnHeaderList lst = new FormsColumnHeaderList();
-            for (int i = 0; i < size(); i++) {
-                if (getFormsColumnHeader(i).getBlockName().equals(sBlockName) && getFormsColumnHeader(i).getSortMode() != FormsColumnHeader.UNSORTED) {
-                    lst.add(getFormsColumnHeader(i));
+      }
+      
+      public class FormsColumnHeaderList extends ArrayList {
+          public FormsColumnHeader getFormsColumnHeader(int i) {
+              return (FormsColumnHeader)get(i);
+          }
+          
+          public FormsColumnHeaderList getList(String sBlockName) {
+              FormsColumnHeaderList lst = new FormsColumnHeaderList();
+              for (int i=0; i<size(); i++) {
+                  if (getFormsColumnHeader(i).getBlockName().equals(sBlockName) && getFormsColumnHeader(i).getSortMode() != FormsColumnHeader.UNSORTED) {
+                      lst.add(getFormsColumnHeader(i));
+                  }
+              }
+              return lst;
+          }
+          
+        public void resetAllInBlock(String sBlockName) {
+            for (int i=0; i<size(); i++) {
+                if (getFormsColumnHeader(i).getBlockName().equals(sBlockName)) {
+                  getFormsColumnHeader(i).setSortMode(FormsColumnHeader.UNSORTED);
+                  getFormsColumnHeader(i).setSortOrder(FormsColumnHeader.NOORDER);
                 }
             }
-            return lst;
         }
-    }
+      }
 }
