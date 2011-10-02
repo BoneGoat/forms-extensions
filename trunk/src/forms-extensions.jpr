@@ -55,6 +55,17 @@
       <string v="oracle.adfdtinternal.model.ide.settings.ADFMSettings/adfmContentSet"/>
    </list>
    <value n="defaultPackage" v="com.bincsoft.forms"/>
+   <hash n="oracle.jdeveloper.compiler.ant.AntConfiguration">
+      <value n="makeTarget" v="all"/>
+      <url n="projectBuildfile" path="build.xml"/>
+      <list n="targetList">
+         <string v="all"/>
+         <string v="clean"/>
+         <string v="compile"/>
+         <string v="copy"/>
+         <string v="deploy"/>
+      </list>
+   </hash>
    <hash n="oracle.jdeveloper.compiler.OjcConfiguration">
       <value n="internalEncoding" v="Cp1252"/>
       <list n="Javac.commandline.optionlist">
@@ -139,6 +150,10 @@
             <value n="id" v="Frmall.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
+         <hash>
+            <value n="id" v="Aspectjrt.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
       </list>
       <hash n="internalDefinitions">
          <list n="libraryDefinitions">
@@ -151,11 +166,24 @@
                <value n="id" v="Frmall.jar"/>
                <value n="locked" v="true"/>
             </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/aspectjrt.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Aspectjrt.jar"/>
+               <value n="id" v="Aspectjrt.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
          </list>
       </hash>
       <list n="libraryReferences">
          <hash>
             <value n="id" v="Frmall.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Aspectjrt.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
