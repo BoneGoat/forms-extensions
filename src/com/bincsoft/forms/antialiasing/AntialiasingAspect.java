@@ -17,37 +17,37 @@ public class AntialiasingAspect {
     }
 
     @Before("execution (* oracle.ewt.lwAWT.lwText.LWTextField.paintCanvasInterior(..))")
-    public void beforePaintCanvasInterior(JoinPoint joinPoint) throws Throwable {
+    public void beforePaintCanvasInterior(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.ewt.lwAWT.lwText.Paragraph.doDrawString(..))")
-    public void beforeDoDrawString(JoinPoint joinPoint) throws Throwable {
+    public void beforeDoDrawString(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.ewt.multiLineLabel.MultiLineLabel._paintCanvasInterior(..))")
-    public void before_paintCanvasInterior(JoinPoint joinPoint) throws Throwable {
+    public void before_paintCanvasInterior(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.ewt.multiLineLabel.MultiLineLabel._paintFullJustified(..))")
-    public void before_paintFullJustified(JoinPoint joinPoint) throws Throwable {
+    public void before_paintFullJustified(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.forms.handler.PromptItem.drawPrompt(..))")
-    public void beforeDrawPrompt(JoinPoint joinPoint) throws Throwable {
+    public void beforeDrawPrompt(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.graphics.vgs.ui.Rect.drawGraphic(..))")
-    public void beforeDrawGraphic(JoinPoint joinPoint) throws Throwable {
+    public void beforeDrawGraphic(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
     @Before("execution (* oracle.graphics.vgs.ui.Text.drawText(..))")
-    public void beforeDrawText(JoinPoint joinPoint) throws Throwable {
+    public void beforeDrawText(JoinPoint joinPoint) {
         enableFontAntialiasing(((Graphics2D)joinPoint.getArgs()[0]));
     }
 
