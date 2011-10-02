@@ -1,0 +1,1 @@
+Put the file frmall.jar from your Forms 10g or 11g installation here.
